@@ -1,0 +1,83 @@
+
+DFs
+------------------------------------
+
+T-Even
+------ 
+f1             unpolarized          
+g_1L           LO in A_LL
+g_1T           LO in A_LT
+h_1L^perp      LO in A_UL
+h_1T^perp      Pretzelocity
+h_1            Transversity
+
+
+T-Odd
+------
+f_1T^perp      Sivers              
+h_1^perp       Boer-Mulders
+
+
+Tilde functions
+---------------
+
+f_perp~
+h~
+
+(more tilde functions need to be listed, but don't have models for them anyhow)
+
+
+NOTE INVALID DFs:
+-----------------
+
+h_1T           (deprecated in favor of h1 and h_1T^perp)
+h              (use tilde and twist 2 functions)
+f^perp
+e
+g^perp
+h_L
+f_L^perp
+e_L
+g_L^perp
+f_T
+h_T
+h_T^perp
+f_T^perp
+g_T
+e_T
+e_T^perp
+g_T^perp
+
+
+
+
+SINGLE HADRON FFs
+------------------------------------
+
+D1
+H_1^perp
+
+
+DIHADRON FFs
+------------------------------------
+
+Re_D1_00
+Re_D1_11
+Re_D1_10
+Re_D1_22
+Re_D1_21
+Re_D1_20
+Im_D1_11
+Im_D1_10
+Im_D1_22
+Im_D1_21
+
+H_1^perp_00
+H_1^perp_11
+H_1^perp_10
+H_1^perp_1m1
+H_1^perp_22
+H_1^perp_21
+H_1^perp_20
+H_1^perp_2m1
+H_1^perp_2m2

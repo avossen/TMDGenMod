@@ -1,0 +1,55 @@
+include ../Makefile.in
+
+OTHER_LD_FLAGS = -L/home/sgliske/hermes/projects/cpp_code/lib -lPWC_Module -lsgUtil $(ROOT_LD_FLAGS) 
+OTHER_CPP_FLAGS = -I/home/sgliske/hermes/projects/cpp_code/PWC_Module.d -I/home/sgliske/hermes/projects/cpp_code/Util.d $(ROOT_CPP_FLAGS)
+
+
+OBJECTS = $(wildcard ../[a-zA-VX-Z]*.d/*.o)
+
+
+.PHONY: bin EXEC_FILES
+
+#EXEC_FILES = $(patsubst %.cpp,%,$(wildcard *[a-zA-Z].cpp))
+EXEC_FILES = GMC_Trans_exec
+
+
+OBJ_FILES = $(wildcard ../*.d/*.o)
+
+all:	bin
+
+bin:	clean $(EXEC_FILES) install
+
+clean:
+	@rm -f *.a *.o *.so $(EXEC_FILES)
+
+#.cpp: $(OBJECTS)
+#	$(CPP) $(CPP_FLAGS) -o $@ $*.cpp -I.. $(INCLUDE_PATH) $(LD_FLAGS) $(LIBS) $(GSL_LIBS) $(OBJECTS)
+
+.PHONY: install
+
+GMC_Trans_exec: GMC_Trans_exec.cpp ../lib/libGMC_Trans.a
+	$(CPP) -o GMC_Trans GMC_Trans_exec.cpp $(CPP_FLAGS) -I.. $(INCLUDE_PATH) $(LD_FLAGS) $(LIBS) $(GSL_LIBS) $(OBJECTS) $(ROOT_LD_FLAGS) $(ROOT_CPP_FLAGS) $(DAD_LD_FLAGS) $(LD_LHAPDF)
+
+GMC_Trans_exec.cpp:
+	@
+
+
+Opt_D1_Spec_Ia: ../lib/libGMC_Trans.a
+	$(CPP) $(CPP_FLAGS) -o Opt_D1_Spec_Ia Opt_D1_Spec_Ia.cpp -I.. $(INCLUDE_PATH) -L../lib -lGMC_Trans $(LD_FLAGS) $(LIBS) $(GSL_LIBS) $(ROOT_LD_FLAGS) $(ROOT_CPP_FLAGS) $(DAD_LD_FLAGS)
+
+
+
+GMC_Trans_Rebesca: GMC_Trans_Rebesca.cpp ../lib/libGMC_Trans.a
+	$(CPP) $(CPP_FLAGS) -o GMC_Trans_Rebesca GMC_Trans_Rebesca.cpp -I.. $(INCLUDE_PATH)  -L../lib -lGMC_Trans $(LD_FLAGS) $(LIBS) $(GSL_LIBS) -L../lib -lGMC_Trans $(OTHER_LD_FLAGS) $(OTHER_CPP_FLAGS)
+
+GMC_Trans_Rebesca.cpp:
+	@
+
+GMC_Trans_Achim: GMC_Trans_Achim.cpp ../lib/libGMC_Trans.a
+	$(CPP) $(CPP_FLAGS) -o GMC_Trans_Achim GMC_Trans_Achim.cpp -I.. $(INCLUDE_PATH)  -L../lib -lGMC_Trans $(LD_FLAGS) $(LIBS) $(GSL_LIBS) -L../lib -lGMC_Trans $(OTHER_LD_FLAGS) $(OTHER_CPP_FLAGS)
+
+GMC_Trans_Achim.cpp:
+	@
+
+install:
+	@cp GMC_Trans ../bin

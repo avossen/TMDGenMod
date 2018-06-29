@@ -1,0 +1,48 @@
+Welcome to the new TMDGen (prerelease version).  Currently, TMDGen is
+not released to the public, and is copy-written by the University of
+Michigan with all rights reserved.  Work is in progress to release
+TMDGen publicly under a GPL.
+
+If you are reading this, you must have successfully received the source
+code.
+
+In order to install, edit the file Makefile.in to ensure that the
+correct options are selected, especially the directories for any
+external libraries.
+
+Compiling with Root output can be selected via -UUSE_ROOT or -DUSE_ROOT
+
+Typing 'make' will make the executables within the sub-directory 'bin'
+and libraries within the directory 'lib'.
+
+Ensure that these are included in your path and ld library path, and
+then you can execute TMDGen via
+
+TMDGen <instruction_file> <number_of_events>
+
+Example instruction files are found in the 'Example' directory.  A
+more complete list of commands can be found by grepping 'find', as in
+
+grep find *.d/*.cpp
+
+The file VALID_INTERNAL_NAMES lists the valid names for distribution
+and fragmentation functions.
+
+Further documentation is forthcoming....
+
+Dependencies:
+
+For root, make sure you also have the physics development headers.
+Forexample, on a debian system, the command
+
+sudo apt-cache search root physics dev
+
+shows that the needed headers can be installed via
+
+sudo apt-get install libroot-math-physics-dev
+
+-----
+
+Stephen Gliske
+sgliske@umich.edu
+December, 2013

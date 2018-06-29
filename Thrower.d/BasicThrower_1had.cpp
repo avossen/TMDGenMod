@@ -1,0 +1,76 @@
+
+#include "Thrower.d/BasicThrower.h"
+#include "Thrower.d/BasicThrower_1had.h"
+
+#include "Common.d/Consts.h"
+#include "Thrower.d/GSL_Integration.h"
+
+
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_monte_vegas.h>
+
+namespace TMDGen {
+   namespace Thrower {
+
+
+      BasicThrower_1had_t::BasicThrower_1had_t( RNG_t *r_in, int N_integration_warmup_, int N_integration_calls,
+                                                int N_max_integration_calls_,
+                                                const Var_t& min_in, const Var_t& max_in ) :
+         BasicThrower_t( r_in,  N_integration_warmup_, N_integration_calls, N_max_integration_calls_, min_in, max_in )
+      {
+         width.x       = (max.x       - min.x);
+         width.y       = (max.y       - min.y);
+         width.z       = (max.z       - min.z);
+         width.P_hperp = (max.P_hperp - min.P_hperp );
+         width.pT      = (max.pT      - min.pT);
+
+         Vinv = 1./width.x/width.y/width.z/width.P_hperp/width.pT/TWO_PI/TWO_PI/TWO_PI;
+      };
+
+
+      // specialization for different dependent variables
+      void BasicThrower_1had_t::Init_GSL_Func( gsl_monte_function *gsl_F, double* &min_array, double* &max_array ){
+         // set correct function to integrate
+
+         gsl_F->f = &GSL_IntegrationFunction_1h;
+         gsl_F->dim = 8;
+
+         min_array = new double [ gsl_F->dim ];
+         max_array = new double [ gsl_F->dim ];
+
+         min_array[0] = min.x;
+         min_array[1] = min.y;
+         min_array[2] = min.z;
+         min_array[3] = min.P_hperp;
+         min_array[4] = 0;            // phi_h
+         min_array[5] = min.pT;
+         min_array[6] = 0;            // phi_{p_T}
+         min_array[7] = 0;            // psi
+   
+         max_array[0] = max.x;
+         max_array[1] = max.y;
+         max_array[2] = max.z;
+         max_array[3] = max.P_hperp;
+         max_array[4] = TWO_PI;      // phi_h
+         max_array[5] = max.pT; 
+         max_array[6] = TWO_PI;      // phi_{p_T}
+         max_array[7] = TWO_PI;      // psi
+      };
+
+      // for throwing according to different distributions
+      void BasicThrower_1had_t::ThrowVariables( Var_t& var, double& pdf_val ){
+
+         var.x       = r->EvalUnif()*width.x       + min.x;
+         var.y       = r->EvalUnif()*width.y       + min.y;
+         var.z       = r->EvalUnif()*width.z       + min.z;
+         var.P_hperp = r->EvalUnif()*width.P_hperp + min.P_hperp;
+         var.phi_h   = r->EvalUnif()*TWO_PI;
+         var.pT      = r->EvalUnif()*width.pT      + min.pT;
+         var.phi_pT  = r->EvalUnif()*TWO_PI;
+         var.psi     = r->EvalUnif()*TWO_PI;
+
+         pdf_val = Vinv;
+      };
+
+   };
+};

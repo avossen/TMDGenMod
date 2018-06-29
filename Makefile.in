@@ -1,0 +1,97 @@
+### specify the compiler programs
+CPP := g++
+CC  := gcc
+FORTRAN := gfortran
+
+### specify location of the GSL headers if not in a standard location
+GSL_DIR :=
+
+### specify location of the GSL libgsl.a and libgslcblas.a if not in a
+### standard location
+GSL_LIB_DIR :=
+
+### specify the location of CERN ROOT if not in a usual location.
+### This should be the directory to the root-config executable
+ROOTSYS=
+
+### To Use LHAPDF libraries, uncomment the following lines and comment
+### the later lines disableing LHAPDF.  If LHAPDF binaries are not in
+### the path, specify the directory in LHAPDF_BIN and make sure it ends
+### with a /
+# LHAPDF_BIN=/user/sgliske/lhapdf/bin/
+# CFLAGS_LHAPDF=`$(LHAPDF_BIN)lhapdf-config --cppflags`
+# LD_LHAPDF=`$(LHAPDF_BIN)lhapdf-config --ldflags`
+
+### To not use LHAPDF libraries, uncomment the following lines and comment
+### the above lines enableing LHAPDF.
+LHAPDF_BIN=
+CFLAGS_LHAPDF=-DNO_LHAPDF
+LD_LHAPDF=-DNO_LHAPDF
+
+### no modifications should be needed below this point, except unusual
+### circumstances.
+
+### base directory
+BASE_DIR=$(PWD)
+
+### The library for gfortran.  Set to NULL if not needed.  Sometimes
+### -lg2c is also (instead) needed, and sometimes the locations of these
+### libraries must be specified in LIBS.
+GFORTRAN=-lgfortran
+LIBS := -L/usr/lib64 $(GFORTRAN) 
+
+### the include path
+INCLUDE_PATH = -I$(BASE_DIR) $(DAD_PATH)
+
+
+ifeq ($(GSL_DIR),)
+    # do nothing
+else
+   INCLUDE_PATH = $(INCLUDE_PATH) -I$(GSL_DIR)
+endif
+
+
+### Flags for C++
+CPP_FLAGS := -Wall -Wpointer-arith -O2 -DNDEBUG -g -DGSL_RANGE_CHECK_OFF -fPIC -Df2cFortran -DUSE_ROOT -DUSE_DAD 
+C_FLAGS = $(CPP_FLAGS)
+
+### Flags for fortran
+FFLAGS := -Wall -O2 -DNDEBUG -g -fPIC -fno-second-underscore -fno-automatic -ff2c
+### library flags
+LDFLAGS := -lm $(DAD_LD_FLAGS)
+AR_FLAGS := 
+AR_LIBS := 
+
+### root flags
+
+ifeq ($(ROOTSYS),)
+    ROOT_LD_FLAGS =  `root-config --libs`
+    ROOT_CPP_FLAGS = `root-config --cflags`
+    # do nothing
+else
+    ROOT_LD_FLAGS = `$(ROOTSYS)/root-config --libs`
+    ROOT_CPP_FLAGS = `$(ROOTSYS)/root-config --cflags`
+endif
+
+### GSL library files
+ifeq ($(GSL_LIB_DIR),)
+    GSL_LIBS := -lgsl -lgslcblas
+else
+    GSL_LIBS := -L $(GSL_LIB_DIR) -lgsl -lgslcblas
+endif
+
+### phony tags
+.PHONY: all obj libs bin clean
+
+###
+### ------------------------------------------------------------
+### Copyright (c) 2013  S. Gliske and the University of Michigan
+### This software is the proprietary information of University of Michigan.
+### All Rights Reserved.
+### ------------------------------------------------------------
+###
+### SVN revision information:
+### @version $Revision$:
+### @author  $Author$:
+### @date    $Date$:
+###

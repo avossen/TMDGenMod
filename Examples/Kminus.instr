@@ -1,0 +1,83 @@
+# The instruction file is interpretted such that the first word on each line
+# is a directive, and the remaining words on the line form the options for
+# the directive, such as
+Process Drell-Yan
+# gives the 'Process' directive the command 'Drell-Yan'
+#
+# No errors are given for unknown directives
+# If the same directive appears multiple times in a file, then only the 
+# last occuring line is used.
+#
+# Comments can be inserted by either beginning the line with a '#'
+# Or placed after a '!'
+# Whitespace within a line is ignored, as are blank lines
+
+# Basic process information
+
+Process            SIDIS                ! Only SIDIS so far, later could have other options
+Final_State        Single Hadron        ! Current options are 'Single Hadron' or 'Dihadron'
+Beam_Pol           U                    ! options are U, T, L (but not everything is programmed yet)
+Target_Pol         U                    ! options are U, T, L (but not everything is programmed yet)
+Twist              3                    ! 
+Hadron_PID         K-                   ! options are pi+, pi-, pi0, K+, K-
+
+
+# Models
+
+f1                      GRV98
+f1_pT                   Exp Torino 0.18
+#D1                      fDSS 0 /hermes/pro/gmc/lib/frag
+D1                      fDSS 0 /u/home/avossen/work/diHadronSimu/TMDGen/lib
+D1_kT                   Exp Torino 0.25
+
+
+# Once you get an idea of the distribution of weights for a given
+# choice of parameters, you can set the max weight via
+#MaxWeight               Set 200
+
+
+# Output
+
+Output_To_Root_File     piplus.unpol.root
+
+
+# Generatation details
+
+Generate_with_Weights   No
+VarThrower              Basic
+
+Basic_VarThrower_N_warmup     10000
+Basic_VarThrower_N_calls      100000
+Basic_VarThrower_N_max_calls  1000000
+
+
+# Domain
+
+Q2_min  1
+Q2_max  50
+W2_min  4
+W2_max  100
+ x_min  0.023
+ x_max  0.4
+ y_min  0.2
+ y_max  0.85
+ z_min  0.2
+ z_max  0.8
+P_hperp_min  0.0
+P_hperp_max  2.0
+kT_min  0
+kT_max  8
+pT_min  0.0
+pT_max  3.0
+
+
+# Further parameters for various models
+
+CTEQ_iSet               3
+CTEQ_Path               /user/sgliske/GMC_Trans/src/CTEQ6.d
+
+GRV98_iSet              3
+GRV98_Path              /user/sgliske/GMC_Trans/src/GRV.d/grids
+
+GRSV2000_iSet           2
+GRSV2000_Path           /user/sgliske/GMC_Trans/src/GRV.d/grids
